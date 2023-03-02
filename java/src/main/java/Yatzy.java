@@ -9,9 +9,6 @@ class DiceRolls implements Iterable<Integer> {
         this.diceRolls = new int[]{d1, d2, d3, d4, d5};
     }
 
-    public int get(int index){
-        return diceRolls[index];
-    }
     @Override
     public Iterator<Integer> iterator() {
         return streams().iterator();
@@ -31,32 +28,27 @@ public class Yatzy {
     }
 
     public static int yatzy(DiceRolls diceRolls) {
-        if (diceRolls.streams().allMatch(n -> n == diceRolls.iterator().next())){
+        //if (diceRolls.streams().allMatch(n -> n == diceRolls.iterator().next())){
+//        if (diceRolls.streams().collect(toSet()).size() == 1){
+        if (diceRolls.streams().distinct().count() == 1){
             return 50;
         }
         return 0;
     }
 
-    public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 1) sum++;
-        if (d2 == 1) sum++;
-        if (d3 == 1) sum++;
-        if (d4 == 1) sum++;
-        if (d5 == 1)
-            sum++;
-
-        return sum;
+    public static int ones(DiceRolls diceRolls) {
+        return sumValuesWithDiceRoll(diceRolls, 1);
     }
 
-    public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 2) sum += 2;
-        if (d2 == 2) sum += 2;
-        if (d3 == 2) sum += 2;
-        if (d4 == 2) sum += 2;
-        if (d5 == 2) sum += 2;
-        return sum;
+    public static int twos(DiceRolls diceRolls) {
+        return sumValuesWithDiceRoll(diceRolls, 2);
+    }
+
+    private static int sumValuesWithDiceRoll(DiceRolls diceRolls, int diceRoll) {
+        return diceRolls.streams()
+            .filter(i -> i == diceRoll)
+            .mapToInt(Integer::intValue)
+            .sum();
     }
 
     public static int threes(int d1, int d2, int d3, int d4, int d5) {
